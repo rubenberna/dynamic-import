@@ -1,7 +1,8 @@
-
 import React, { useState, useMemo, useCallback } from "react";
 import { NavLink, Route, Switch, useHistory } from "react-router-dom";
 import Select from "react-select";
+import { currentRoutes as mfaRoutes } from "./microFrontendRoutes";
+import { currentRoutes as utilRoutes } from "./reactUtilitiesRoutes";
 import "./App.css";
 
 const App = () => {
@@ -24,8 +25,8 @@ const App = () => {
 
 	const routeMapping = useMemo(
 		() => ({
-			mfa: "microFrontendRoutes",
-			util: "reactUtilitiesRoutes",
+			mfa: mfaRoutes,
+			util: utilRoutes,
 		}),
 		[]
 	);
@@ -35,9 +36,7 @@ const App = () => {
 	const handleTopicChange = useCallback(
 		(selected) => {
 			setTopic(selected);
-			import("./" + routeMapping[selected.value]).then((module) => {
-				setRoutes(module.currentRoutes);
-			});
+			setRoutes(routeMapping[selected.value]);
 			history.push(`/`);
 		},
 		[history, routeMapping]
@@ -45,8 +44,8 @@ const App = () => {
 
 	return (
 		<div className="App">
-			<h1>This is an example of dynamic loading</h1>
-			<p>Jennifer's articles are not loaded until the category is selected.</p>
+			<h1>This is an example of static import</h1>
+			<p>Jennifer's articles are initially loaded to be used.</p>
 			<Select
 				className="select-category"
 				value={topic}
